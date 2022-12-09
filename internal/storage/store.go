@@ -1,28 +1,17 @@
 package store
 
 import (
-	"devops/internal/helpers"
+	"devops/internal/metrics"
 	"sync"
 )
 
 type MemStorage struct {
 	sync.RWMutex
-	items map[string]Item
+	items map[string]item
 }
 
-type Item struct {
+type item struct {
 	Value interface{}
-}
-
-// Создаем новый экземпляр хранилища
-func New() *MemStorage {
-	// инициализируем карту(map) в паре ключ(string)/значение(Item)
-	items := make(map[string]Item)
-
-	cache := MemStorage{
-		items: items,
-	}
-	return &cache
 }
 
 // Установка значений
@@ -30,7 +19,7 @@ func (c *MemStorage) Set(key string, value interface{}) {
 	c.Lock()
 	defer c.Unlock()
 
-	c.items[key] = Item{
+	c.items[key] = item{
 		Value: value,
 	}
 }
@@ -41,7 +30,6 @@ func (c *MemStorage) Get(key string) (interface{}, bool) {
 	defer c.RUnlock()
 
 	item, found := c.items[key]
-	// ключ не найден
 	if !found {
 		return nil, false
 	}
@@ -50,33 +38,34 @@ func (c *MemStorage) Get(key string) (interface{}, bool) {
 
 // Инициализация хранилища нужными метриками
 func (c *MemStorage) Init() {
-	c.Set("Alloc", helpers.Gauge(0))
-	c.Set("BuckHashSys", helpers.Gauge(0))
-	c.Set("Frees", helpers.Gauge(0))
-	c.Set("GCCPUFraction", helpers.Gauge(0))
-	c.Set("GCSys", helpers.Gauge(0))
-	c.Set("HeapAlloc", helpers.Gauge(0))
-	c.Set("HeapIdle", helpers.Gauge(0))
-	c.Set("HeapInuse", helpers.Gauge(0))
-	c.Set("HeapObjects", helpers.Gauge(0))
-	c.Set("HeapReleased", helpers.Gauge(0))
-	c.Set("HeapSys", helpers.Gauge(0))
-	c.Set("LastGC", helpers.Gauge(0))
-	c.Set("Lookups", helpers.Gauge(0))
-	c.Set("MCacheInuse", helpers.Gauge(0))
-	c.Set("MCacheSys", helpers.Gauge(0))
-	c.Set("MSpanInuse", helpers.Gauge(0))
-	c.Set("MSpanSys", helpers.Gauge(0))
-	c.Set("Mallocs", helpers.Gauge(0))
-	c.Set("NextGC", helpers.Gauge(0))
-	c.Set("NumForcedGC", helpers.Gauge(0))
-	c.Set("NumGC", helpers.Gauge(0))
-	c.Set("OtherSys", helpers.Gauge(0))
-	c.Set("PauseTotalNs", helpers.Gauge(0))
-	c.Set("StackInuse", helpers.Gauge(0))
-	c.Set("StackSys", helpers.Gauge(0))
-	c.Set("Sys", helpers.Gauge(0))
-	c.Set("TotalAlloc", helpers.Gauge(0))
-	c.Set("RandomValue", helpers.Gauge(0))
-	c.Set("PollCount", helpers.Counter(0))
+	c.items = make(map[string]item)
+	c.Set("Alloc", metrics.Gauge(0))
+	c.Set("BuckHashSys", metrics.Gauge(0))
+	c.Set("Frees", metrics.Gauge(0))
+	c.Set("GCCPUFraction", metrics.Gauge(0))
+	c.Set("GCSys", metrics.Gauge(0))
+	c.Set("HeapAlloc", metrics.Gauge(0))
+	c.Set("HeapIdle", metrics.Gauge(0))
+	c.Set("HeapInuse", metrics.Gauge(0))
+	c.Set("HeapObjects", metrics.Gauge(0))
+	c.Set("HeapReleased", metrics.Gauge(0))
+	c.Set("HeapSys", metrics.Gauge(0))
+	c.Set("LastGC", metrics.Gauge(0))
+	c.Set("Lookups", metrics.Gauge(0))
+	c.Set("MCacheInuse", metrics.Gauge(0))
+	c.Set("MCacheSys", metrics.Gauge(0))
+	c.Set("MSpanInuse", metrics.Gauge(0))
+	c.Set("MSpanSys", metrics.Gauge(0))
+	c.Set("Mallocs", metrics.Gauge(0))
+	c.Set("NextGC", metrics.Gauge(0))
+	c.Set("NumForcedGC", metrics.Gauge(0))
+	c.Set("NumGC", metrics.Gauge(0))
+	c.Set("OtherSys", metrics.Gauge(0))
+	c.Set("PauseTotalNs", metrics.Gauge(0))
+	c.Set("StackInuse", metrics.Gauge(0))
+	c.Set("StackSys", metrics.Gauge(0))
+	c.Set("Sys", metrics.Gauge(0))
+	c.Set("TotalAlloc", metrics.Gauge(0))
+	c.Set("RandomValue", metrics.Gauge(0))
+	c.Set("PollCount", metrics.Counter(0))
 }

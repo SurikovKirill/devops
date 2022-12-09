@@ -12,7 +12,7 @@ import (
 )
 
 func TestMetricsResourceUpdate_Update(t *testing.T) {
-	m := store.New()
+	var m store.MemStorage
 	m.Init()
 	type want struct {
 		code        int
@@ -67,7 +67,7 @@ func TestMetricsResourceUpdate_Update(t *testing.T) {
 			w := httptest.NewRecorder()
 			// определяем хендлер
 			h := chi.NewRouter()
-			h.Mount("/update", MetricsResourceUpdate{M: m}.Routes())
+			h.Mount("/update", MetricsResourceUpdate{M: &m}.Routes())
 			h.ServeHTTP(w, request)
 			res := w.Result()
 			defer res.Body.Close()
@@ -79,7 +79,7 @@ func TestMetricsResourceUpdate_Update(t *testing.T) {
 }
 
 func TestMetricsResourceUpdate_Value(t *testing.T) {
-	m := store.New()
+	var m store.MemStorage
 	m.Init()
 	type want struct {
 		code        int
@@ -107,7 +107,7 @@ func TestMetricsResourceUpdate_Value(t *testing.T) {
 			w := httptest.NewRecorder()
 			// определяем хендлер
 			h := chi.NewRouter()
-			h.Mount("/value", MetricsResource{M: m}.Routes())
+			h.Mount("/value", MetricsResource{M: &m}.Routes())
 			h.ServeHTTP(w, request)
 			res := w.Result()
 			defer res.Body.Close()

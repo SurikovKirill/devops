@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"devops/internal/helpers"
+	"devops/internal/metrics"
 	store "devops/internal/storage"
 	"fmt"
 	"html/template"
@@ -26,18 +26,17 @@ func (rs MetricsResource) Routes() chi.Router {
 	return r
 }
 
-const (
-	html = `
-	<h1>Metrics</h1>
-	{{
-		range .MemStorage
-	}}
-	{{end}}
-	`
-)
-
 // Вывести все метрики
 func (rs MetricsResource) list(w http.ResponseWriter, r *http.Request) {
+	const (
+		html = `
+		<h1>Metrics</h1>
+		{{
+			range .MemStorage
+		}}
+		{{end}}
+		`
+	)
 	tmpl := template.Must(template.New("").Parse(html))
 	if err := tmpl.Execute(w, rs.M); err != nil {
 		log.Fatal(err)
@@ -58,10 +57,10 @@ func (rs MetricsResource) get(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("content-type", "text/plain")
 	if t == "counter" {
-		w.Write([]byte(fmt.Sprintf("%d", v.(helpers.Counter))))
+		w.Write([]byte(fmt.Sprintf("%d", v.(metrics.Counter))))
 		return
 	}
-	w.Write([]byte(fmt.Sprintf("%g", v.(helpers.Gauge))))
+	w.Write([]byte(fmt.Sprintf("%g", v.(metrics.Gauge))))
 }
 
 // Структура хэндлера для /update
@@ -92,12 +91,12 @@ func (rs MetricsResourceUpdate) updateMetrics(w http.ResponseWriter, r *http.Req
 			return
 		}
 		if last == nil {
-			rs.M.Set(chi.URLParam(r, "name"), helpers.Counter(val))
+			rs.M.Set(chi.URLParam(r, "name"), metrics.Counter(val))
 			w.Header().Set("content-type", "text/plain")
 			w.WriteHeader(http.StatusOK)
 			return
 		}
-		rs.M.Set(chi.URLParam(r, "name"), helpers.Counter(val)+last.(helpers.Counter))
+		rs.M.Set(chi.URLParam(r, "name"), metrics.Counter(val)+last.(metrics.Counter))
 		w.Header().Set("content-type", "text/plain")
 		w.WriteHeader(http.StatusOK)
 		return
@@ -108,10 +107,9 @@ func (rs MetricsResourceUpdate) updateMetrics(w http.ResponseWriter, r *http.Req
 			http.Error(w, "Wrong value", http.StatusBadRequest)
 			return
 		}
-		rs.M.Set(chi.URLParam(r, "name"), helpers.Gauge(val))
+		rs.M.Set(chi.URLParam(r, "name"), metrics.Gauge(val))
 		w.Header().Set("content-type", "text/plain")
 		w.WriteHeader(http.StatusOK)
 		return
 	}
-
 }

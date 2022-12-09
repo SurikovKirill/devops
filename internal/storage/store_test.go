@@ -1,7 +1,7 @@
 package store
 
 import (
-	"devops/internal/helpers"
+	"devops/internal/metrics"
 	"reflect"
 	"testing"
 )
@@ -11,6 +11,8 @@ func TestMemStorage_Set(t *testing.T) {
 		key   string
 		value interface{}
 	}
+	var m MemStorage
+	m.Init()
 	tests := []struct {
 		name string
 		c    *MemStorage
@@ -18,7 +20,7 @@ func TestMemStorage_Set(t *testing.T) {
 	}{
 		{
 			name: "Simple test gauge",
-			c:    New(),
+			c:    &m,
 			args: args{
 				key:   "Alloc",
 				value: 1.555,
@@ -26,7 +28,7 @@ func TestMemStorage_Set(t *testing.T) {
 		},
 		{
 			name: "Simple test counter",
-			c:    New(),
+			c:    &m,
 			args: args{
 				key:   "Alloc",
 				value: 8,
@@ -44,7 +46,7 @@ func TestMemStorage_Get(t *testing.T) {
 	type args struct {
 		key string
 	}
-	m := New()
+	var m MemStorage
 	m.Init()
 	tests := []struct {
 		name  string
@@ -55,16 +57,16 @@ func TestMemStorage_Get(t *testing.T) {
 	}{
 		{
 			name: "Simple test gauge exist",
-			c:    m,
+			c:    &m,
 			args: args{
 				key: "Alloc",
 			},
-			want:  helpers.Gauge(0),
+			want:  metrics.Gauge(0),
 			want1: true,
 		},
 		{
 			name: "Simple test gauge doesn't exist",
-			c:    m,
+			c:    &m,
 			args: args{
 				key: "Alloccc",
 			},
@@ -73,16 +75,16 @@ func TestMemStorage_Get(t *testing.T) {
 		},
 		{
 			name: "Simple test count exist",
-			c:    m,
+			c:    &m,
 			args: args{
 				key: "PollCount",
 			},
-			want:  helpers.Counter(0),
+			want:  metrics.Counter(0),
 			want1: true,
 		},
 		{
 			name: "Simple test count doesn't exist",
-			c:    m,
+			c:    &m,
 			args: args{
 				key: "PollCounterrrrr",
 			},
