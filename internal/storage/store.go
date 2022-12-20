@@ -14,7 +14,6 @@ type item struct {
 	Value interface{}
 }
 
-// Установка значений
 func (c *MemStorage) Set(key string, value interface{}) {
 	c.Lock()
 	defer c.Unlock()
@@ -24,7 +23,6 @@ func (c *MemStorage) Set(key string, value interface{}) {
 	}
 }
 
-// Получение значения из хранилища по ключу
 func (c *MemStorage) Get(key string) (interface{}, bool) {
 	c.RLock()
 	defer c.RUnlock()
@@ -36,7 +34,6 @@ func (c *MemStorage) Get(key string) (interface{}, bool) {
 	return item.Value, true
 }
 
-// Инициализация хранилища нужными метриками
 func (c *MemStorage) Init() {
 	c.items = make(map[string]item)
 	c.Set("Alloc", metrics.Gauge(0))

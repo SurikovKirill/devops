@@ -12,45 +12,43 @@ import (
 	"github.com/go-chi/chi"
 )
 
-// Структура хэндлера для /value
-type MetricsResource struct {
+type MetricsGet struct {
 	M *store.MemStorage
 }
 
-func (rs MetricsResource) Routes() chi.Router {
+func (mg *MetricsGet) Routes() chi.Router {
 	r := chi.NewRouter()
-	r.Get("/", rs.list)
+	r.Get("/", mg.list)
 	r.Route("/", func(r chi.Router) {
-		r.Get("/{type}/{name}", rs.get)
+		r.Get("/{type}/{name}", mg.get)
 	})
 	return r
 }
 
-// Вывести все метрики
-func (rs MetricsResource) list(w http.ResponseWriter, r *http.Request) {
-	const (
-		html = `
-		<h1>Metrics</h1>
-		{{
-			range .MemStorage
-		}}
-		{{end}}
-		`
-	)
+const (
+	html = `
+	<h1>Metrics</h1>
+	{{
+		range .MemStorage
+	}}
+	{{end}}
+	`
+)
+
+func (mg *MetricsGet) list(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.New("").Parse(html))
-	if err := tmpl.Execute(w, rs.M); err != nil {
+	if err := tmpl.Execute(w, mg.M); err != nil {
 		log.Fatal(err)
 	}
 }
 
-// Получить метрику
-func (rs MetricsResource) get(w http.ResponseWriter, r *http.Request) {
+func (mg *MetricsGet) get(w http.ResponseWriter, r *http.Request) {
 	t := chi.URLParam(r, "type")
 	if t != "gauge" && t != "counter" {
 		http.Error(w, "Wrong type of metric", http.StatusNotFound)
 		return
 	}
-	v, ok := rs.M.Get(chi.URLParam(r, "name"))
+	v, ok := mg.M.Get(chi.URLParam(r, "name"))
 	if !ok {
 		http.Error(w, "Wrong name metric or doesn't exist", http.StatusNotFound)
 		return
@@ -63,40 +61,38 @@ func (rs MetricsResource) get(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(fmt.Sprintf("%g", v.(metrics.Gauge))))
 }
 
-// Структура хэндлера для /update
-type MetricsResourceUpdate struct {
+type MetricsUpdate struct {
 	M *store.MemStorage
 }
 
-func (rs MetricsResourceUpdate) Routes() chi.Router {
+func (mu *MetricsUpdate) Routes() chi.Router {
 	r := chi.NewRouter()
 	r.Route("/", func(r chi.Router) {
-		r.Post("/{type}/{name}/{val}", rs.updateMetrics)
+		r.Post("/{type}/{name}/{val}", mu.updateMetrics)
 	})
 	return r
 }
 
-// Обновить значение метрики
-func (rs MetricsResourceUpdate) updateMetrics(w http.ResponseWriter, r *http.Request) {
+func (mu *MetricsUpdate) updateMetrics(w http.ResponseWriter, r *http.Request) {
 	t := chi.URLParam(r, "type")
 	if t != "counter" && t != "gauge" {
 		http.Error(w, "The metric doesn't exist", http.StatusNotImplemented)
 		return
 	}
 	if t == "counter" {
-		last, _ := rs.M.Get(chi.URLParam(r, "name"))
+		last, _ := mu.M.Get(chi.URLParam(r, "name"))
 		val, err := strconv.ParseInt(chi.URLParam(r, "val"), 10, 64)
 		if err != nil {
 			http.Error(w, "Wrong value", http.StatusBadRequest)
 			return
 		}
 		if last == nil {
-			rs.M.Set(chi.URLParam(r, "name"), metrics.Counter(val))
+			mu.M.Set(chi.URLParam(r, "name"), metrics.Counter(val))
 			w.Header().Set("content-type", "text/plain")
 			w.WriteHeader(http.StatusOK)
 			return
 		}
-		rs.M.Set(chi.URLParam(r, "name"), metrics.Counter(val)+last.(metrics.Counter))
+		mu.M.Set(chi.URLParam(r, "name"), metrics.Counter(val)+last.(metrics.Counter))
 		w.Header().Set("content-type", "text/plain")
 		w.WriteHeader(http.StatusOK)
 		return
@@ -107,7 +103,7 @@ func (rs MetricsResourceUpdate) updateMetrics(w http.ResponseWriter, r *http.Req
 			http.Error(w, "Wrong value", http.StatusBadRequest)
 			return
 		}
-		rs.M.Set(chi.URLParam(r, "name"), metrics.Gauge(val))
+		mu.M.Set(chi.URLParam(r, "name"), metrics.Gauge(val))
 		w.Header().Set("content-type", "text/plain")
 		w.WriteHeader(http.StatusOK)
 		return

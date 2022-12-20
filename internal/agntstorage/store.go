@@ -163,8 +163,9 @@ func (m *Metrics) Update(r runtime.MemStats) {
 	m.RandomValue = gauge(rand.Uint64())
 }
 
+const url = "http://127.0.0.1:8080"
+
 func (m *Metrics) Send() {
-	const url = "http://127.0.0.1:8080"
 	for k, v := range m.GaugeRuntimeMetrics {
 		if _, err := http.Post(fmt.Sprintf("%s/update/gauge/%s/%g", url, k, v), "text/plain", nil); err != nil {
 			log.Println(err)

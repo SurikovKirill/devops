@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
-	"sync"
 	"time"
 )
 
@@ -24,10 +23,9 @@ func main() {
 	m.Init()
 	tickerPoll := time.NewTicker(pollInterval)
 	tickerReport := time.NewTicker(reportInterval)
-	var wg sync.WaitGroup
-	wg.Add(1)
+	ch := make(chan struct{})
 	go func() {
-		defer wg.Done()
+		defer close(ch)
 		for {
 			select {
 			case <-tickerPoll.C:
@@ -42,5 +40,5 @@ func main() {
 			}
 		}
 	}()
-	wg.Wait()
+	<-ch
 }

@@ -65,9 +65,9 @@ func TestMetricsResourceUpdate_Update(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			request := httptest.NewRequest(http.MethodPost, tt.url, bytes.NewBufferString(""))
 			w := httptest.NewRecorder()
-			// определяем хендлер
 			h := chi.NewRouter()
-			h.Mount("/update", MetricsResourceUpdate{M: &m}.Routes())
+			rt := MetricsUpdate{M: &m}
+			h.Mount("/update", rt.Routes())
 			h.ServeHTTP(w, request)
 			res := w.Result()
 			defer res.Body.Close()
@@ -105,9 +105,9 @@ func TestMetricsResourceUpdate_Value(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			request := httptest.NewRequest(http.MethodGet, tt.url, bytes.NewBufferString(""))
 			w := httptest.NewRecorder()
-			// определяем хендлер
 			h := chi.NewRouter()
-			h.Mount("/value", MetricsResource{M: &m}.Routes())
+			rt := MetricsGet{M: &m}
+			h.Mount("/value", rt.Routes())
 			h.ServeHTTP(w, request)
 			res := w.Result()
 			defer res.Body.Close()
