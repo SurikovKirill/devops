@@ -14,55 +14,55 @@ type item struct {
 	Value interface{}
 }
 
-func (c *MemStorage) Set(key string, value interface{}) {
-	c.Lock()
-	defer c.Unlock()
+func (ms *MemStorage) Set(key string, value interface{}) {
+	ms.Lock()
+	defer ms.Unlock()
 
-	c.items[key] = item{
+	ms.items[key] = item{
 		Value: value,
 	}
 }
 
-func (c *MemStorage) Get(key string) (interface{}, bool) {
-	c.RLock()
-	defer c.RUnlock()
+func (ms *MemStorage) Get(key string) (interface{}, bool) {
+	ms.RLock()
+	defer ms.RUnlock()
 
-	item, found := c.items[key]
+	item, found := ms.items[key]
 	if !found {
 		return nil, false
 	}
 	return item.Value, true
 }
 
-func (c *MemStorage) Init() {
-	c.items = make(map[string]item)
-	c.Set("Alloc", metrics.Gauge(0))
-	c.Set("BuckHashSys", metrics.Gauge(0))
-	c.Set("Frees", metrics.Gauge(0))
-	c.Set("GCCPUFraction", metrics.Gauge(0))
-	c.Set("GCSys", metrics.Gauge(0))
-	c.Set("HeapAlloc", metrics.Gauge(0))
-	c.Set("HeapIdle", metrics.Gauge(0))
-	c.Set("HeapInuse", metrics.Gauge(0))
-	c.Set("HeapObjects", metrics.Gauge(0))
-	c.Set("HeapReleased", metrics.Gauge(0))
-	c.Set("HeapSys", metrics.Gauge(0))
-	c.Set("LastGC", metrics.Gauge(0))
-	c.Set("Lookups", metrics.Gauge(0))
-	c.Set("MCacheInuse", metrics.Gauge(0))
-	c.Set("MCacheSys", metrics.Gauge(0))
-	c.Set("MSpanInuse", metrics.Gauge(0))
-	c.Set("MSpanSys", metrics.Gauge(0))
-	c.Set("Mallocs", metrics.Gauge(0))
-	c.Set("NextGC", metrics.Gauge(0))
-	c.Set("NumForcedGC", metrics.Gauge(0))
-	c.Set("NumGC", metrics.Gauge(0))
-	c.Set("OtherSys", metrics.Gauge(0))
-	c.Set("PauseTotalNs", metrics.Gauge(0))
-	c.Set("StackInuse", metrics.Gauge(0))
-	c.Set("StackSys", metrics.Gauge(0))
-	c.Set("Sys", metrics.Gauge(0))
-	c.Set("TotalAlloc", metrics.Gauge(0))
-	c.Set("RandomValue", metrics.Gauge(0))
-	c.Set("PollCount", metrics.Counter(0))
+func (ms *MemStorage) Init() {
+	ms.items = make(map[string]item)
+	ms.Set("Alloc", metrics.Gauge(0))
+	ms.Set("BuckHashSys", metrics.Gauge(0))
+	ms.Set("Frees", metrics.Gauge(0))
+	ms.Set("GCCPUFraction", metrics.Gauge(0))
+	ms.Set("GCSys", metrics.Gauge(0))
+	ms.Set("HeapAlloc", metrics.Gauge(0))
+	ms.Set("HeapIdle", metrics.Gauge(0))
+	ms.Set("HeapInuse", metrics.Gauge(0))
+	ms.Set("HeapObjects", metrics.Gauge(0))
+	ms.Set("HeapReleased", metrics.Gauge(0))
+	ms.Set("HeapSys", metrics.Gauge(0))
+	ms.Set("LastGC", metrics.Gauge(0))
+	ms.Set("Lookups", metrics.Gauge(0))
+	ms.Set("MCacheInuse", metrics.Gauge(0))
+	ms.Set("MCacheSys", metrics.Gauge(0))
+	ms.Set("MSpanInuse", metrics.Gauge(0))
+	ms.Set("MSpanSys", metrics.Gauge(0))
+	ms.Set("Mallocs", metrics.Gauge(0))
+	ms.Set("NextGC", metrics.Gauge(0))
+	ms.Set("NumForcedGC", metrics.Gauge(0))
+	ms.Set("NumGC", metrics.Gauge(0))
+	ms.Set("OtherSys", metrics.Gauge(0))
+	ms.Set("PauseTotalNs", metrics.Gauge(0))
+	ms.Set("StackInuse", metrics.Gauge(0))
+	ms.Set("StackSys", metrics.Gauge(0))
+	ms.Set("Sys", metrics.Gauge(0))
+	ms.Set("TotalAlloc", metrics.Gauge(0))
+	ms.Set("RandomValue", metrics.Gauge(0))
+	ms.Set("PollCount", metrics.Counter(0))
 }
