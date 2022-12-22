@@ -53,114 +53,92 @@ func (m *Metrics) Init() {
 
 func (m *Metrics) Update(r runtime.MemStats) {
 	if m.GaugeRuntimeMetrics["Alloc"] != gauge(r.Alloc) {
-		m.GaugeRuntimeMetrics["Alloc"] = gauge(r.Alloc)
-		m.PollCount += 1
+		m.updateMetric("Alloc", gauge(r.Alloc))
 	}
 	if m.GaugeRuntimeMetrics["BuckHashSys"] != gauge(r.BuckHashSys) {
-		m.GaugeRuntimeMetrics["BuckHashSys"] = gauge(r.BuckHashSys)
-		m.PollCount += 1
+		m.updateMetric("BuckHashSys", gauge(r.BuckHashSys))
 	}
 	if m.GaugeRuntimeMetrics["Frees"] != gauge(r.Frees) {
-		m.GaugeRuntimeMetrics["Frees"] = gauge(r.Frees)
-		m.PollCount += 1
+		m.updateMetric("Frees", gauge(r.Frees))
 	}
 	if m.GaugeRuntimeMetrics["GCCPUFraction"] != gauge(r.GCCPUFraction) {
-		m.GaugeRuntimeMetrics["GCCPUFraction"] = gauge(r.GCCPUFraction)
-		m.PollCount += 1
+		m.updateMetric("GCCPUFraction", gauge(r.GCCPUFraction))
 	}
 	if m.GaugeRuntimeMetrics["GCSys"] != gauge(r.GCSys) {
-		m.GaugeRuntimeMetrics["GCSys"] = gauge(r.GCSys)
-		m.PollCount += 1
+		m.updateMetric("GCSys", gauge(r.GCSys))
 	}
 	if m.GaugeRuntimeMetrics["HeapAlloc"] != gauge(r.HeapAlloc) {
-		m.GaugeRuntimeMetrics["HeapAlloc"] = gauge(r.HeapAlloc)
-		m.PollCount += 1
+		m.updateMetric("HeapAlloc", gauge(r.HeapAlloc))
 	}
 	if m.GaugeRuntimeMetrics["HeapIdle"] != gauge(r.HeapIdle) {
-		m.GaugeRuntimeMetrics["HeapIdle"] = gauge(r.HeapIdle)
-		m.PollCount += 1
+		m.updateMetric("HeapIdle", gauge(r.HeapIdle))
 	}
 	if m.GaugeRuntimeMetrics["HeapInuse"] != gauge(r.HeapInuse) {
-		m.GaugeRuntimeMetrics["HeapInuse"] = gauge(r.HeapInuse)
-		m.PollCount += 1
+		m.updateMetric("HeapInuse", gauge(r.HeapInuse))
 	}
 	if m.GaugeRuntimeMetrics["HeapObjects"] != gauge(r.HeapObjects) {
-		m.GaugeRuntimeMetrics["HeapObjects"] = gauge(r.HeapObjects)
-		m.PollCount += 1
+		m.updateMetric("HeapObjects", gauge(r.HeapObjects))
 	}
 	if m.GaugeRuntimeMetrics["HeapReleased"] != gauge(r.HeapReleased) {
-		m.GaugeRuntimeMetrics["HeapReleased"] = gauge(r.HeapReleased)
-		m.PollCount += 1
+		m.updateMetric("HeapReleased", gauge(r.HeapReleased))
 	}
 	if m.GaugeRuntimeMetrics["HeapSys"] != gauge(r.HeapSys) {
-		m.GaugeRuntimeMetrics["HeapSys"] = gauge(r.HeapSys)
-		m.PollCount += 1
+		m.updateMetric("HeapSys", gauge(r.HeapSys))
 	}
 	if m.GaugeRuntimeMetrics["LastGC"] != gauge(r.LastGC) {
-		m.GaugeRuntimeMetrics["LastGC"] = gauge(r.LastGC)
-		m.PollCount += 1
+		m.updateMetric("LastGC", gauge(r.LastGC))
 	}
 	if m.GaugeRuntimeMetrics["Lookups"] != gauge(r.Lookups) {
-		m.GaugeRuntimeMetrics["Lookups"] = gauge(r.Lookups)
-		m.PollCount += 1
+		m.updateMetric("Lookups", gauge(r.Lookups))
 	}
 	if m.GaugeRuntimeMetrics["MCacheInuse"] != gauge(r.MCacheInuse) {
-		m.GaugeRuntimeMetrics["MCacheInuse"] = gauge(r.MCacheInuse)
-		m.PollCount += 1
+		m.updateMetric("MCacheInuse", gauge(r.MCacheInuse))
 	}
 	if m.GaugeRuntimeMetrics["MCacheSys"] != gauge(r.MCacheSys) {
-		m.GaugeRuntimeMetrics["MCacheSys"] = gauge(r.MCacheSys)
-		m.PollCount += 1
+		m.updateMetric("MCacheSys", gauge(r.MCacheSys))
 	}
 	if m.GaugeRuntimeMetrics["MSpanInuse"] != gauge(r.MSpanInuse) {
-		m.GaugeRuntimeMetrics["MSpanInuse"] = gauge(r.MSpanInuse)
-		m.PollCount += 1
+		m.updateMetric("MSpanInuse", gauge(r.MSpanInuse))
 	}
 	if m.GaugeRuntimeMetrics["MSpanSys"] != gauge(r.MSpanSys) {
-		m.GaugeRuntimeMetrics["MSpanSys"] = gauge(r.MSpanSys)
-		m.PollCount += 1
+		m.updateMetric("MSpanSys", gauge(r.MSpanSys))
 	}
 	if m.GaugeRuntimeMetrics["Mallocs"] != gauge(r.Mallocs) {
-		m.GaugeRuntimeMetrics["Mallocs"] = gauge(r.Mallocs)
-		m.PollCount += 1
+		m.updateMetric("Mallocs", gauge(r.Mallocs))
 	}
 	if m.GaugeRuntimeMetrics["NextGC"] != gauge(r.NextGC) {
-		m.GaugeRuntimeMetrics["NextGC"] = gauge(r.NextGC)
-		m.PollCount += 1
+		m.updateMetric("NextGC", gauge(r.NextGC))
 	}
 	if m.GaugeRuntimeMetrics["NumForcedGC"] != gauge(r.NumForcedGC) {
-		m.GaugeRuntimeMetrics["NumForcedGC"] = gauge(r.NumForcedGC)
-		m.PollCount += 1
+		m.updateMetric("NumForcedGC", gauge(r.NumForcedGC))
 	}
 	if m.GaugeRuntimeMetrics["NumGC"] != gauge(r.NumGC) {
-		m.GaugeRuntimeMetrics["NumGC"] = gauge(r.NumGC)
-		m.PollCount += 1
+		m.updateMetric("NumGC", gauge(r.NumGC))
 	}
 	if m.GaugeRuntimeMetrics["OtherSys"] != gauge(r.OtherSys) {
-		m.GaugeRuntimeMetrics["OtherSys"] = gauge(r.OtherSys)
-		m.PollCount += 1
+		m.updateMetric("OtherSys", gauge(r.OtherSys))
 	}
 	if m.GaugeRuntimeMetrics["PauseTotalNs"] != gauge(r.PauseTotalNs) {
-		m.GaugeRuntimeMetrics["PauseTotalNs"] = gauge(r.PauseTotalNs)
-		m.PollCount += 1
+		m.updateMetric("PauseTotalNs", gauge(r.PauseTotalNs))
 	}
 	if m.GaugeRuntimeMetrics["StackInuse"] != gauge(r.StackInuse) {
-		m.GaugeRuntimeMetrics["StackInuse"] = gauge(r.StackInuse)
-		m.PollCount += 1
+		m.updateMetric("StackInuse", gauge(r.StackInuse))
 	}
 	if m.GaugeRuntimeMetrics["StackSys"] != gauge(r.StackSys) {
-		m.GaugeRuntimeMetrics["StackSys"] = gauge(r.StackSys)
-		m.PollCount += 1
+		m.updateMetric("StackSys", gauge(r.StackSys))
 	}
 	if m.GaugeRuntimeMetrics["Sys"] != gauge(r.Sys) {
-		m.GaugeRuntimeMetrics["Sys"] = gauge(r.Sys)
-		m.PollCount += 1
+		m.updateMetric("Sys", gauge(r.Sys))
 	}
 	if m.GaugeRuntimeMetrics["TotalAlloc"] != gauge(r.TotalAlloc) {
-		m.GaugeRuntimeMetrics["TotalAlloc"] = gauge(r.TotalAlloc)
-		m.PollCount += 1
+		m.updateMetric("TotalAlloc", gauge(r.TotalAlloc))
 	}
 	m.RandomValue = gauge(rand.Uint64())
+}
+
+func (m *Metrics) updateMetric(key string, value gauge) {
+	m.GaugeRuntimeMetrics[key] = value
+	m.PollCount += 1
 }
 
 const url = "http://127.0.0.1:8080"
