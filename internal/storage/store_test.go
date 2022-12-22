@@ -48,6 +48,8 @@ func TestMemStorage_Get(t *testing.T) {
 	}
 	var m MemStorage
 	m.Init()
+	m.Set("PollCount", metrics.Counter(0))
+	m.Set("Alloc", metrics.Gauge(0))
 	tests := []struct {
 		name  string
 		c     *MemStorage

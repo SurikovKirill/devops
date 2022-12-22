@@ -9,7 +9,7 @@ import (
 
 func main() {
 	var m store.MemStorage
-	// m.Init()
+	m.Init()
 	r := routes.New(&m)
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
